@@ -1,6 +1,12 @@
 = pdfthat-client
 
-This gem allows you to play nicely with http://pdfth.at/
+This gem allows you to play nicely with http://pdfth.at
+
+== Overview
+
+pdfTH.AT is a HTML to PDF rendering system that allows you to hand in HTML or a URL and have that rendered into a PDF.   This can be done on a queue and posted back to your system, or rendered in real time and returned as base64 encoded data.
+
+You'll need a free account from http://pdfth.at to play along, log in and get your token to access the system.
 
 == Requirements
 
@@ -16,11 +22,16 @@ You might need administrator privileges on your system to install it.
 
 == Getting Started
 
-You'll need an API token to use this gem, head over to http://pdfth.at/ to sign up for one, development accounts are free and can be used straight away.
+You'll need an API token to use this gem, head over to http://pdfth.at to sign up for one, development accounts are free and can be used straight away.
 
-Include the gem in your Gemfile
+Include the gem in your Gemfile, if you are running Rails
   
   gem "pdfthat-client", :require => "pdfthat"  
+  
+Include it like any other gem otherwise
+
+  require 'pdfthat'
+
   
 If using rails, Initialise the library in a preinitializer
 
@@ -30,40 +41,36 @@ If using rails, Initialise the library in a preinitializer
   
 Otherwise, initialise it before you use it.
 
-*By Default, the client will be talking to the pdfthat DEVELOPMENT api.  Override this setting*
+By Default, the client will be talking to the pdfthat DEVELOPMENT api, to override this setting:
 
   Pdfthat.configure do |pdf|
     pdf.token = "<token goes here>"
     pdf.production = true
   end
 
-== Overview
-
-pdfTH.AT is a HTML to PDF rendering system that allows you to hand in HTML or a URL and have that rendered into a PDF.   This can be done on a queue and posted back to your system, or rendered in real time and returned as base64 encoded data.
-
 == Usage
 
-*Using the pdfTHAT Queue for a URL*
+Using the pdfTHAT Queue for a URL
 
   Pdfthat.create_document(:document => {:url => "http://google.com.au/"})
   
-*Using the pdfTHAT Queue for a URL with a postback*
+Using the pdfTHAT Queue for a URL with a postback
 
   Pdfthat.create_document(:document => {:url => "http://google.com.au/", :postback_url => "http://exampl.com/documents/done"})
   
-*Using the pdfTHAT Queue for HTML*
+Using the pdfTHAT Queue for HTML
 
   Pdfthat.create_document(:document => {:html_string => "<html><head><title>My Page</title></head><body><strong>This is my page</strong></body></html>"})  
   
-*Using the pdfTHAT Queue for HTML with a postback*
+Using the pdfTHAT Queue for HTML with a postback
 
   Pdfthat.create_document(:document => {:html_string => "<html><head><title>My Page</title></head><body><strong>This is my page</strong></body></html>", :postback_url => "http://exampl.com/documents/done"})  
 
-*Using pdfTHAT in real-time for a URL*
+Using pdfTHAT in real-time for a URL
 
   Pdfthat.create_document(:document => {:url => "http://google.com.au/",:wait_for_pdf => true})
   
-*Using pdfTHAT in real-time for HTML*
+Using pdfTHAT in real-time for HTML
 
   Pdfthat.create_document(:document => {:url => "<html><head><title>My Page</title></head><body><strong>This is my page</strong></body></html>",:wait_for_pdf => true})
   
@@ -103,7 +110,7 @@ To query the document at a later date, use:
   
 It'll return the same result as the create_document method.
 
-*NOTE: If you are using the wait_for_pdf method, you will also get an attribute called "base64_pdf_data" that includes the PDF file encoded in base64.  This is only available in the results of the create method, to access the document after that, use the storage_url attribute*
+NOTE: If you are using the wait_for_pdf method, you will also get an attribute called "base64_pdf_data" that includes the PDF file encoded in base64.  This is only available in the results of the create method, to access the document after that, use the storage_url attribute
     
 == Note on Patches/Pull Requests
  
