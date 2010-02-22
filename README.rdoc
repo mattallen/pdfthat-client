@@ -36,6 +36,41 @@ To convert an accessible URL to a PDF, using the standard pdfTHAT queue
 
   Pdfthat.create_document(:document => {:url => "http://google.com.au/"})
 
+The results of that call will be similar to:
+
+  {"s3_bucket"=>"bucket",
+   "media_type"=>"screen",
+   "created_at"=>"Mon Feb 22 00:30:56 UTC 2010",
+   "upload_time"=>nil,
+   "upload_results"=>nil,
+   "error_messages"=>[],
+   "uuid"=>"76f93970-0177-012d-4131-0026b0d759a2",
+   "updated_at"=>"Mon Feb 22 00:30:56 UTC 2010",
+   "postback_url"=>nil,
+   "url"=>"http://google.com.au/",
+   "render_time"=>nil,
+   "storage_url"=>
+    "http://s3.amazonaws.com/bucket/76f93970-0177-012d-4131-0026b0d759a2.pdf",
+   "return_pdf"=>false,
+   "id"=>202,
+   "successful"=>true,
+   "user_id"=>1,
+   "styles"=>nil,
+   "render_results"=>nil,
+   "media"=>"screen",
+   "development"=>false,
+   "workflow_state"=>"new",
+   "wait_for_pdf"=>false,
+   "postback_time"=>nil,
+   "html_string"=>nil,
+   "postback_results"=>nil}
+   
+The workflow_state of this document is "new", that means the documents has been put in the queue, ready to be rendered. To query the document, use the get_document method
+
+  pdfthat.get_document(:id => "76f93970-0177-012d-4131-0026b0d759a2")
+  
+It'll return the same result as the create_document method.
+
     
 == Note on Patches/Pull Requests
  
