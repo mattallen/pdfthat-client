@@ -1,40 +1,32 @@
-require 'httparty'
-class Pdfthat
-  include HTTParty
-  class << self
-    attr :token,true
-    def token(t)
-      @token = t
-    end
-    
-    def default_options
-      @default_options[:timeout]  ||= 10000
-      @default_options[:base_uri] ||= "http://pdfth.at"
-      super
-    end
+require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-    def configure
-      yield self
-    end    
-
-    def create_document(options)
-      return false unless @token
-      results = post('/documents.json', :query => options.merge(:token => @token))
-      return results
+describe "Pdfth.atRubyClient" do
+  context 'defaults' do
+    it "should set it's default URL" do
+      Pdfthat.base_uri.should == "http://pdfth.at"
     end
-    def get_document(options)
-      return false unless @token
-      results = get("/documents/#{options[:id]}.json", :query => options.merge(:token => @token))
-      return results
+    it "should set the default timeout to 10 seconds" do
+      Pdfthat.default_options[:timeout].should == 10000
     end
-
+  end
+  context '#get_document' do
+    it "should fail without a token" do
+      Pdfthat.get_document(:id => "abc").should == false
+    end
+    it "should pass with a token" do
+      Pdfthat.configure do |pdf|
+        pdf.token "629f29cb8d7c3de87fc248ea400b679688b3d5a128c01c981c"
+        pdf.base_uri "http://pdf.local"
+      end
+      Pdfthat.get_document(:id => "2f5321a0-0163-012d-412f-0026b0d759a2").should be_a(Hash)
+    end
+  end
+  context '#create_document' do
+    it "should fail without a token" do
+      Pdfthat.configure do |pdf|
+        pdf.token = nil
+      end
+      Pdfthat.create_document(:document => {:url => "http://google.com.au/"}).should == false
+    end
   end
 end
-# Pdfthat.configure do |pdf|
-#   pdf.token = "629f29cb8d7c3de87fc248ea400b679688b3d5a128c01c981c"
-#   pdf.default_options = {:timeout => 1}
-#   pdf.base_uri 'http://pdf.local'
-# 
-# end
-# p = Pdfthat.new
-# puts p.get_document(:id => "2f5321a0-0163-012d-412f-0026b0d759a2")

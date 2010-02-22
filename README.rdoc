@@ -1,7 +1,42 @@
 = pdfthat-client
 
-Description goes here.
+This gem allows you to play nicely with http://pdfth.at/
 
+== Requirements
+
+* HTTParty >= 0.5.2
+
+== Installation
+
+This library is intended to be installed as a Gem.
+
+  $ gem install pdfthat-client
+
+You might need administrator privileges on your system to install it.
+
+== Getting Started
+
+You'll need an API token to use this gem, head over to http://pdfth.at/ to sign up for one, development accounts are free and can be used straight away.
+
+Include the gem in your Gemfile
+  
+  gem "pdfthat-client", :require => "pdfthat"  
+  
+If using rails, Initialise the library in a preinitializer
+
+  Pdfthat.configure do |pdf|
+    pdf.token = "<token goes here>"
+  end
+  
+Otherwise, initialise it before you use it.
+
+== Usage
+
+To convert an accessible URL to a PDF, using the standard pdfTHAT queue
+
+  Pdfthat.create_document(:document => {:url => "http://google.com.au/"})
+
+    
 == Note on Patches/Pull Requests
  
 * Fork the project.
