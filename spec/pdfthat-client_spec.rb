@@ -8,6 +8,15 @@ describe "Pdfth.atRubyClient" do
     it "should set the default timeout to 10 seconds" do
       Pdfthat.default_options[:timeout].should == 10000
     end
+    it "should default to development" do
+      Pdfthat.api_uri.should == "/api/v1/development"
+    end
+    it "should allow development to be over-written" do
+      Pdfthat.configure do |pdf|
+        pdf.production true
+      end
+      Pdfthat.api_uri.should == "/api/v1"
+    end
   end
   context '#get_document' do
     it "should fail without a token" do

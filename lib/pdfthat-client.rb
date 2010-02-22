@@ -3,6 +3,12 @@ class Pdfthat
   include HTTParty
   class << self
     attr :token,true
+    attr :production,true
+    
+    def production(d)
+      @production = d
+    end
+  
     def token(t)
       @token = t
     end
@@ -15,19 +21,23 @@ class Pdfthat
 
     def configure
       yield self
-    end    
+    end
+    
+    def api_uri
+      dev_uri = @production == true ?  "" :  "/development"
+      "/api/v1#{dev_uri}"
+    end
 
     def create_document(options)
       return false unless @token
-      results = post('/documents.json', :query => options.merge(:token => @token))
+      results = post(api_uri + "/documents.json", :query => options.merge(:token => @token))
       return results
     end
     def get_document(options)
       return false unless @token
-      results = get("/documents/#{options[:id]}.json", :query => options.merge(:token => @token))
+      results = get(api_uri + "/documents/#{options[:id]}.json", :query => options.merge(:token => @token))
       return results
     end
-
   end
 end
 # Pdfthat.configure do |pdf|
